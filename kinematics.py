@@ -80,24 +80,22 @@ def displacement():
     thet1=fsolve(system,theta1)[0]
     thet3=t3(thet1)
     return thet3,thet1
-    
-    
-   
 
 def velocity():
-    sol=np.array([r2*cos(theta2)*theta2_dot,-r2*sin(theta2)*theta2_dot])
-    equa=np.array([[r3*cos(theta3),-r1*cos(theta1)],[-r3*sin(theta3),r1*sin(theta1)]])
+    sol=np.array([r2*sin(theta2)*theta2_dot,-r2*cos(theta2)*theta2_dot])
+    equa=np.array([[r3*sin(theta3),-r1*sin(theta1)],[-r3*cos(theta3),r1*cos(theta1)]])
     X=np.linalg.inv(equa).dot(sol)
     return (X[0],X[1])
 
 def acceleration():
-    result2=-r2*cos(theta2)*theta1_dot**2 +r3*cos(theta3)*theta3_dot**2-r1*cos(theta1)*theta1_dot**2
-    result1=-r2*sin(theta2)*theta1_dot**2 +r3*sin(theta3)*theta3_dot**2-r1*sin(theta1)*theta1_dot**2
+    result2=-r2*cos(theta2)*(theta2_dot)**2 +r3*cos(theta3)*(theta3_dot)**2-r1*cos(theta1)*(theta1_dot)**2
+    result1=-r2*sin(theta2)*(theta2_dot)**2 +r3*sin(theta3)*(theta3_dot)**2-r1*sin(theta1)*(theta1_dot)**2
     sol=np.array([result1,result2])
     equa=np.array([[r3*cos(theta3),-r1*cos(theta1)],[-r3*sin(theta3),r1*sin(theta1)]])
     X=np.linalg.inv(equa).dot(sol)
     return (X[0],X[1])
-    
+
+
 
 
 for i in range(resolution):
@@ -111,8 +109,11 @@ for i in range(resolution):
     theta3_dot,theta1_dot=velocity()
     theta3_doubledot,theta1_doubledot=acceleration()
     theta2s.append(theta2)
+
     theta3_doubledots.append(theta3_doubledot)
     theta1_doubledots.append(theta1_doubledot)
+
+
     acg2x_o=-(r2/2)*(cos(theta2)*theta2_dot**2)
     acg2y_o=-(r2/2)*(sin(theta2)*theta2_dot**2)
     acg1x_o=2*acg2x_o-(r1/2)*(cos(theta1)*theta1_dot**2+theta1_doubledot*sin(theta1))
