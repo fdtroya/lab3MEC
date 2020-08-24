@@ -1,4 +1,5 @@
-from sympy import *
+from math import *
+from scipy.optimize import fsolve
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,19 +14,19 @@ r3=0.1825498
 r4=0.244475
 theta4=2.3911
 theta2_dot=52.3599
-d=1
+d=0.09525
 Fp=1201.01984
 
-m1=1
-I1=1
+m1=2.154825
+I1=0.0325033
 
-m2=1
-I2=1
+m2=0.51455
+I2=4.42623*10**-4
 
-m3=1
-I3=1
+m3=1.849
+I3=0.0205
 
-mp=1
+mp=13.1542
 
 g=9.81
 #variables
@@ -39,7 +40,7 @@ theta3_dot=0
 theta3_doubledot=0
 theta3_doubledots=[]
 
-theta1=0    
+theta1=2    
 theta1_dot=0    
 theta1_doubledot=0
 theta1_doubledots=[]
@@ -63,20 +64,23 @@ F13=[]
 F43=[]
 
 
+
+
 def magnitud(x,y):
     return (x**2+y**2)**0.5
 
+def t3(t1):
+    return asin((r2*sin(theta2)-r4*sin(theta4)+r1*sin(t1))/r3)
+def system(t1):
+    return r3*cos(t3(t1))-r1*cos(t1)-r2*cos(theta2)+r4*cos(theta4)
+
+
 def displacement():
 
+    thet1=fsolve(system,theta1)[0]
+    thet3=t3(thet1)
+    return thet3,thet1
     
-    t1 = Symbol('t1')
-    t3 = Symbol('t3')
-    f1 = r3*sin(t3)-r1*sin(t1)-(r2*sin(theta2)-r4*sin(theta4))
-    f2 = r3*cos(t3)-r1*cos(t1)-(r2*cos(theta2)-r4*cos(theta4))
-    a=nsolve((f1, f2), (t3, t1), (theta3,theta1))
-   
-
-    return a
     
    
 
@@ -127,7 +131,7 @@ for i in range(resolution):
     acgpx.append(acgpx_o)
     acgpy.append(acgpy_o)
     
-    print(theta2,theta4,theta3,theta1)
+   
 
 
     row1=[0,1,-1,0,0,0,0,0,0]
